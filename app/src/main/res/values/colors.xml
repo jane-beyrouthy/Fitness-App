@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="button_normal">#2196F3</color>  <!-- Light Blue -->
+    <color name="button_pressed">#1976D2</color> <!-- Dark Blue -->
 </resources>
