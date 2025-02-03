@@ -75,11 +75,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     try {
                         String token = response.getString("token");
+                        String username = response.getString("username");
 
                         // Store token in SharedPreferences
                         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("auth_token", token);
+                        editor.putString("username", username);
                         editor.apply();
 
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
