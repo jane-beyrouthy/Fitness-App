@@ -1,6 +1,7 @@
 package com.example.fitnessapp.models;
 
 public class Post {
+    private String fullName;
     private String username;
     private String content;
     private String imageUrl;
@@ -8,7 +9,8 @@ public class Post {
     private int likesCount;
     private int commentsCount;
 
-    public Post(String username, String content, String imageUrl, String timestamp, int likesCount, int commentsCount) {
+    public Post(String firstName, String lastName,String username, String content, String imageUrl, String timestamp, int likesCount, int commentsCount) {
+        this.fullName = firstName+" "+lastName;
         this.username = username;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -17,6 +19,7 @@ public class Post {
         this.commentsCount = commentsCount;
     }
 
+    public String getFullName() { return fullName;}
     public String getUsername() { return username; }
     public String getContent() { return content; }
     public String getImageUrl() { return imageUrl; }

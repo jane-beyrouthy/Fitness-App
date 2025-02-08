@@ -13,14 +13,49 @@
         android:padding="24dp">
 
         <!-- Circular Logo -->
+
+        <!-- First Name -->
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/circular_logo_bg"
             android:scaleType="centerCrop"
-            android:src="@drawable/fitness_logo"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/circular_logo_bg"/>
+            android:src="@mipmap/ic_launcher_round" />
+
+        <TextView android:text="First Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginBottom="6dp"/>
+        <EditText
+            android:id="@+id/firstName"
+            android:hint="Enter your first name"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Last Name -->
+        <TextView android:text="Last Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginBottom="6dp"/>
+        <EditText
+            android:id="@+id/lastName"
+            android:hint="Enter your last name"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
 
         <!-- Username Label -->
         <TextView
@@ -62,25 +97,74 @@
             android:background="@drawable/input_bg"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Password Label -->
-        <TextView
-            android:text="Password"
+
+        <!-- Password Section -->
+        <TextView android:text="Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@android:color/holo_blue_dark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"/>
 
-        <!-- Password Input -->
-        <EditText
-            android:id="@+id/password"
-            android:hint="Enter your password"
-            android:inputType="textPassword"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"
+                android:drawableTint="@android:color/darker_gray"/>
+
+            <ImageView
+                android:id="@+id/togglePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:paddingBottom="16dp"
+                android:src="@drawable/ic_visibility_off"/>
+        </RelativeLayout>
+
+        <!-- Confirm Password Section -->
+        <TextView android:text="Confirm Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="@drawable/input_bg"
-            android:layout_marginBottom="24dp"/>
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginBottom="6dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/confirmPassword"
+                android:hint="Confirm your password"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"
+                android:layout_marginBottom="18dp"
+                android:drawableTint="@android:color/darker_gray"/>
+
+            <ImageView
+                android:id="@+id/toggleConfirmPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:paddingBottom="16dp"
+                android:src="@drawable/ic_visibility_off" />
+        </RelativeLayout>
 
         <!-- Progress Bar (Initially Hidden) -->
         <ProgressBar
@@ -88,30 +172,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Register Button -->
-        <Button
-            android:id="@+id/registerButton"
-            android:text="Register"
+        <!-- Button Container to Align Side by Side -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <!-- Login Redirect Button -->
-        <Button
-            android:id="@+id/loginRedirectButton"
-            android:text="Already have an account? Log in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            <!-- Register Button -->
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Register"
+                android:background="@drawable/button_bg"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Login Redirect Button -->
+            <Button
+                android:id="@+id/loginRedirectButton"
+                style="@style/CustomButtonStyle"
+                android:text="Log in"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_bg"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

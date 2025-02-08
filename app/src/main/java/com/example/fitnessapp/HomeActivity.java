@@ -3,7 +3,9 @@ package com.example.fitnessapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,39 +17,52 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.fitnessapp.adapters.PostAdapter;
 import com.example.fitnessapp.models.Post;
 import com.example.fitnessapp.utils.ApiHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView tvUsername;
-    private ImageView ivLogout, ivNotifications;
+    private TextView tvName;
+    private ImageView ivLogout, ivSearch , ivNotifications;
+    private Button btnLogNewActivity, btnCreateNewPost;
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private List<Post> postList = new ArrayList<>();
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        tvUsername = findViewById(R.id.tvUsername);
+        tvName = findViewById(R.id.tvName);
         ivLogout = findViewById(R.id.ivLogout);
+        ivSearch = findViewById(R.id.ivSearch);
         ivNotifications = findViewById(R.id.ivNotifications);
         recyclerView = findViewById(R.id.recyclerView);
+        btnLogNewActivity = findViewById(R.id.btnLogNewActivity);
+        btnCreateNewPost = findViewById(R.id.btnCreateNewPost);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadNotifications();
-        loadFeed();
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String firstName = prefs.getString("firstName", "Guest");
+        String lastName = prefs.getString("lastName", "");
+        String fullName = firstName + " "+ lastName;
+        tvName.setText(fullName);
 
-        /*tvUsername.setOnClickListener(view -> {
+        tvName.setOnClickListener(view -> {
             startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-        });*/
+        });
+
+        ivSearch.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, SearchActivity.class)));
 
         ivLogout.setOnClickListener(view -> {
-            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
             prefs.edit().clear().apply();
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
@@ -56,11 +71,63 @@ public class HomeActivity extends AppCompatActivity {
         /*ivNotifications.setOnClickListener(view -> {
             startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
         });*/
+
+        btnLogNewActivity.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, NewLogActivity.class)));
+        btnCreateNewPost.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, CreatePostActivity.class)));
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigationView.setOnItemSelectedListener(this::navigateToScreen);
+
+        loadNotifications();
+        loadFeed();
     }
 
+    private boolean navigateToScreen(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_challenges) {
+            startActivity(new Intent(this, ChallengesActivity.class));
+            finish();
+        } else if (itemId == R.id.nav_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            finish();
+        }
+        return true;
+    }
 
     private void loadFeed() {
-        // Fetch posts from backend and update RecyclerView...
+        String url = "http://10.0.2.2:3000/posts/feed";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        postList.clear();
+                        JSONArray postsArray = response.getJSONArray("posts");
+
+                        for (int i = 0; i < postsArray.length(); i++) {
+                            JSONObject postObj = postsArray.getJSONObject(i);
+
+                            String firstName = postObj.getString("firstName");
+                            String lastName = postObj.getString("lastName");
+                            String username = postObj.getString("username");
+                            String content = postObj.getString("content");
+                            String imageUrl = postObj.optString("imageURL", "");
+                            String timestamp = postObj.getString("timestamp");
+                            int likesCount = postObj.getInt("likesCount");
+                            int commentsCount = postObj.getInt("commentsCount");
+
+                            postList.add(new Post(firstName, lastName, username, content, imageUrl, timestamp, likesCount, commentsCount));
+                        }
+
+                        postAdapter = new PostAdapter(HomeActivity.this, postList);
+                        recyclerView.setAdapter(postAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Toast.makeText(HomeActivity.this, "Failed to load feed", Toast.LENGTH_SHORT).show()
+        );
+
+        ApiHelper.getInstance(this).addToRequestQueue(request);
     }
 
     private void loadNotifications() {

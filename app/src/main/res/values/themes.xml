@@ -1,9 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FitnessApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Light Theme -->
+    <style name="Base.Theme.FitnessApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorSecondary">@color/secondary_blue</item>
+
+        <!-- Background and Surface Colors -->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+
+        <!-- Text Colors -->
+        <item name="android:textColorPrimary">@color/dark_gray</item>
+        <item name="android:textColorSecondary">@color/gray</item>
+
+        <!-- Button and Icon Styles -->
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
     </style>
 
-    <style name="Theme.FitnessApp" parent="Base.Theme.FitnessApp" />
 </resources>

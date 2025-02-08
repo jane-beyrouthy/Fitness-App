@@ -13,14 +13,14 @@
         android:orientation="horizontal"
         android:padding="16dp"
         android:gravity="top"
-        android:background="@android:color/holo_blue_dark">
+        android:background="@color/dark_blue">
 
-        <!-- Username (Clickable) -->
+        <!-- Full Name (Clickable) -->
         <TextView
-            android:id="@+id/tvUsername"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:clickable="true"
@@ -28,9 +28,18 @@
 
         <!-- Spacer -->
         <View
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="39dp"
+            android:layout_weight="1" />
+
+        <!-- Search Icon -->
+        <ImageView
+            android:id="@+id/ivSearch"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_search"
+            app:tint="@android:color/white"
+            android:layout_marginEnd="16dp"/>
 
         <!-- Notifications Icon -->
         <ImageView
@@ -50,10 +59,71 @@
             android:layout_marginStart="16dp"/>
     </LinearLayout>
 
-    <!-- RecyclerView for Posts -->
+    <!-- Buttons Below Toolbar (Side by Side) -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@id/toolbar"
+        android:padding="12dp">
+
+        <!-- Log New Activity Button -->
+        <Button
+            android:id="@+id/btnLogNewActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Log New Activity"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_bg"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Create a New Post Button -->
+        <Button
+            android:id="@+id/btnCreateNewPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Create New Post"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_bg"
+            android:padding="12dp"/>
+    </LinearLayout>
+
+    <!-- Feed Title -->
+    <TextView
+        android:id="@+id/tvFeedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feed"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/buttonContainer"/>
+
+    <!-- Scrollable RecyclerView for Posts -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@id/tvFeedTitle"
+        android:layout_above="@+id/bottomNavigationView"
+        android:scrollbars="vertical"/>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/nav_icon_selector"
+        app:itemTextColor="@color/nav_text_selector"
+        android:background="@android:color/white"/>
 </RelativeLayout>
