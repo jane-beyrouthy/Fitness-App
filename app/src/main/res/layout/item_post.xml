@@ -6,66 +6,70 @@
     android:padding="12dp"
     android:background="@android:color/white">
 
-    <TextView android:id="@+id/tvUsername"
+    <!-- Full Name and Username -->
+    <TextView
+        android:id="@+id/tvFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="16sp"/>
 
-    <TextView android:id="@+id/tvContent"
+    <!-- Activity Type & Duration -->
+    <TextView
+        android:id="@+id/tvActivityType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvDuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"/>
 
-
-
-    <TextView android:id="@+id/tvTimestamp"
+    <!-- Post Content -->
+    <TextView
+        android:id="@+id/tvContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"/>
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
 
     <!-- Like and Comment Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="37dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:layout_marginTop="8dp">
+        android:orientation="horizontal">
 
-        <!-- Like Icon -->
         <ImageView
             android:id="@+id/ivLike"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_like"
-            android:layout_marginEnd="6dp"/>
+            android:src="@drawable/ic_like" />
 
-        <!-- Likes Count -->
         <TextView
             android:id="@+id/tvLikesCount"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"/>
+            android:layout_height="wrap_content" />
 
-        <!-- Spacer -->
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
-        <!-- Comment Icon -->
         <ImageView
             android:id="@+id/ivComment"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_comment"
-            android:layout_marginEnd="6dp"/>
+            android:src="@drawable/ic_comment" />
 
-        <!-- Comments Count -->
         <TextView
             android:id="@+id/tvCommentsCount"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
+

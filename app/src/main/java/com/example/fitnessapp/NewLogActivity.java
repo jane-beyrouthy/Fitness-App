@@ -3,6 +3,7 @@ package com.example.fitnessapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AlertDialog;
@@ -12,11 +13,13 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.fitnessapp.utils.ApiHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NewLogActivity extends AppCompatActivity {
@@ -24,7 +27,10 @@ public class NewLogActivity extends AppCompatActivity {
     private NumberPicker numberPickerDuration;
     private Button btnSaveActivity, btnPostActivity, btnCancelActivity;
     private ImageView ivBack;
-    private Map<String, Integer> activityTypeMap;
+    private Map<String, Integer> activityTypeMap = new HashMap<>();
+    private List<String> activityTypeNames = new ArrayList<>();
+    private String selectedActivity;
+    private int selectedActivityID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,40 +44,60 @@ public class NewLogActivity extends AppCompatActivity {
         btnCancelActivity = findViewById(R.id.btnCancelActivity);
         ivBack = findViewById(R.id.ivBack);
 
-        populateActivityTypes();
         setupNumberPicker();
+        fetchActivityTypes();
 
         btnSaveActivity.setOnClickListener(view -> showSaveConfirmationDialog());
         btnPostActivity.setOnClickListener(view -> goToCreatePost());
         btnCancelActivity.setOnClickListener(view -> showCancelConfirmationDialog());
 
+        spinnerActivityType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0 && position < activityTypeNames.size()) {
+                    selectedActivity = activityTypeNames.get(position); //  Correctly retrieves activity name
+                    selectedActivityID = activityTypeMap.getOrDefault(selectedActivity, -1); //  Maps to ID
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedActivity = null;
+                selectedActivityID = -1;
+            }
+        });
+
         ivBack.setOnClickListener(view -> finish());
     }
-    private void populateActivityTypes() {
-        activityTypeMap = new HashMap<>();
-        activityTypeMap.put("Running", 1);
-        activityTypeMap.put("Walking", 2);
-        activityTypeMap.put("Cycling", 3);
-        activityTypeMap.put("Swimming", 4);
-        activityTypeMap.put("Yoga", 5);
-        activityTypeMap.put("Strength Training", 6);
-        activityTypeMap.put("Jump Rope", 7);
-        activityTypeMap.put("Rowing", 8);
-        activityTypeMap.put("Hiking", 9);
-        activityTypeMap.put("Dancing", 10);
-        activityTypeMap.put("HIIT Workout", 11);
-        activityTypeMap.put("Boxing", 12);
-        activityTypeMap.put("Tennis", 13);
-        activityTypeMap.put("Basketball", 14);
-        activityTypeMap.put("Soccer", 15);
-        activityTypeMap.put("Skiing", 16);
-        activityTypeMap.put("Skating", 17);
-        activityTypeMap.put("Pilates", 18);
-        activityTypeMap.put("Rowing Machine", 19);
-        activityTypeMap.put("Climbing", 20);
+    private void fetchActivityTypes() {
+        String url = "http://10.0.2.2:3000/activity-types/";
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(activityTypeMap.keySet()));
-        spinnerActivityType.setAdapter(adapter);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray activityTypesArray = response.getJSONArray("activityTypes");
+                        activityTypeNames.clear();
+                        activityTypeMap.clear();
+
+                        for (int i = 0; i < activityTypesArray.length(); i++) {
+                            JSONObject activityObj = activityTypesArray.getJSONObject(i);
+                            int id = activityObj.getInt("activityTypeID");
+                            String name = activityObj.getString("name");
+
+                            activityTypeNames.add(name);
+                            activityTypeMap.put(name, id);
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, activityTypeNames);
+                        spinnerActivityType.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Toast.makeText(NewLogActivity.this, "Failed to load activity types", Toast.LENGTH_SHORT).show()
+        );
+
+        ApiHelper.getInstance(this).addToRequestQueue(request);
     }
 
     private void setupNumberPicker() {
@@ -100,6 +126,12 @@ public class NewLogActivity extends AppCompatActivity {
     }
 
     private void goToCreatePost() {
+        // Ensure user has selected an activity type
+        if (spinnerActivityType.getSelectedItem() == null) {
+            Toast.makeText(this, "Please select an activity type", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String selectedActivity = spinnerActivityType.getSelectedItem().toString();
         int activityTypeID = activityTypeMap.get(selectedActivity);
         int duration = numberPickerDuration.getValue();

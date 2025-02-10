@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
-    private ImageView ivLogout, ivSearch , ivNotifications;
+    private ImageView ivLogout, ivSearch;
     private Button btnLogNewActivity, btnCreateNewPost;
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
@@ -42,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
 
         ivLogout = findViewById(R.id.ivLogout);
         ivSearch = findViewById(R.id.ivSearch);
-        ivNotifications = findViewById(R.id.ivNotifications);
         recyclerView = findViewById(R.id.recyclerView);
         btnLogNewActivity = findViewById(R.id.btnLogNewActivity);
         btnCreateNewPost = findViewById(R.id.btnCreateNewPost);
@@ -60,9 +59,6 @@ public class HomeActivity extends AppCompatActivity {
             finish();
         });
 
-        /*ivNotifications.setOnClickListener(view -> {
-            startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
-        });*/
 
         btnLogNewActivity.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, NewLogActivity.class)));
         btnCreateNewPost.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, CreatePostActivity.class)));
@@ -70,7 +66,6 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnItemSelectedListener(this::navigateToScreen);
 
-        loadNotifications();
         loadFeed();
     }
 
@@ -107,15 +102,18 @@ public class HomeActivity extends AppCompatActivity {
                         for (int i = 0; i < postsArray.length(); i++) {
                             JSONObject postObj = postsArray.getJSONObject(i);
 
+                            int postID = postObj.getInt("postID");
                             String firstName = postObj.getString("firstName");
                             String lastName = postObj.getString("lastName");
                             String username = postObj.getString("username");
+                            String activityTypeName = postObj.getString("activityTypeName");
+                            int duration = postObj.getInt("duration");
                             String content = postObj.getString("content");
                             String timestamp = postObj.getString("timestamp");
                             int likesCount = postObj.getInt("likeCount");
                             int commentsCount = postObj.getInt("commentCount");
 
-                            postList.add(new Post(firstName, lastName, username, content, timestamp,likesCount, commentsCount));
+                            postList.add(new Post(postID, firstName, lastName, username, activityTypeName, duration, content, timestamp, likesCount, commentsCount));
                         }
 
                         postAdapter = new PostAdapter(HomeActivity.this, postList);
@@ -138,8 +136,5 @@ public class HomeActivity extends AppCompatActivity {
         ApiHelper.getInstance(this).addToRequestQueue(request);
     }
 
-    private void loadNotifications() {
-        // Fetch unread notifications...
-    }
 }
 

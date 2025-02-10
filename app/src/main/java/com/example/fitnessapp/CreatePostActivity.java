@@ -11,11 +11,13 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.fitnessapp.utils.ApiHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreatePostActivity extends AppCompatActivity {
@@ -24,7 +26,10 @@ public class CreatePostActivity extends AppCompatActivity {
     private Spinner spinnerActivityType;
     private NumberPicker numberPickerDuration;
     private ImageView ivBack;
-    private Map<String, Integer> activityTypeMap;
+    private Map<String, Integer> activityTypeMap = new HashMap<>();
+    private List<String> activityTypeNames = new ArrayList<>();
+    private int selectedActivityID;
+    private String selectedActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,8 @@ public class CreatePostActivity extends AppCompatActivity {
         numberPickerDuration = findViewById(R.id.numberPickerDuration);
         ivBack = findViewById(R.id.ivBack);
 
-        populateActivityTypes();
         setupNumberPicker();
+        fetchActivityTypes();
         autoFillIfFromLogNewActivity();
 
         btnSavePost.setOnClickListener(view -> showSaveConfirmationDialog());
@@ -47,38 +52,42 @@ public class CreatePostActivity extends AppCompatActivity {
 
         ivBack.setOnClickListener(view -> showCancelConfirmationDialog());
     }
-    private void populateActivityTypes() {
-        activityTypeMap = new HashMap<>();
-        activityTypeMap.put("Running", 1);
-        activityTypeMap.put("Walking", 2);
-        activityTypeMap.put("Cycling", 3);
-        activityTypeMap.put("Swimming", 4);
-        activityTypeMap.put("Yoga", 5);
-        activityTypeMap.put("Strength Training", 6);
-        activityTypeMap.put("Jump Rope", 7);
-        activityTypeMap.put("Rowing", 8);
-        activityTypeMap.put("Hiking", 9);
-        activityTypeMap.put("Dancing", 10);
-        activityTypeMap.put("HIIT Workout", 11);
-        activityTypeMap.put("Boxing", 12);
-        activityTypeMap.put("Tennis", 13);
-        activityTypeMap.put("Basketball", 14);
-        activityTypeMap.put("Soccer", 15);
-        activityTypeMap.put("Skiing", 16);
-        activityTypeMap.put("Skating", 17);
-        activityTypeMap.put("Pilates", 18);
-        activityTypeMap.put("Rowing Machine", 19);
-        activityTypeMap.put("Climbing", 20);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(activityTypeMap.keySet()));
-        spinnerActivityType.setAdapter(adapter);
-    }
-
     private void setupNumberPicker() {
         numberPickerDuration.setMinValue(1);
         numberPickerDuration.setMaxValue(300);
         numberPickerDuration.setValue(10); // Default value set to 10 minutes
         numberPickerDuration.setWrapSelectorWheel(true);
+    }
+
+    private void fetchActivityTypes() {
+        String url = "http://10.0.2.2:3000/activity-types/";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray activityTypesArray = response.getJSONArray("activityTypes");
+                        activityTypeNames.clear();
+                        activityTypeMap.clear();
+
+                        for (int i = 0; i < activityTypesArray.length(); i++) {
+                            JSONObject activityObj = activityTypesArray.getJSONObject(i);
+                            int id = activityObj.getInt("activityTypeID");
+                            String name = activityObj.getString("name");
+
+                            activityTypeNames.add(name);
+                            activityTypeMap.put(name, id);
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, activityTypeNames);
+                        spinnerActivityType.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Toast.makeText(CreatePostActivity.this, "Failed to load activity types", Toast.LENGTH_SHORT).show()
+        );
+
+        ApiHelper.getInstance(this).addToRequestQueue(request);
     }
 
     private void autoFillIfFromLogNewActivity() {

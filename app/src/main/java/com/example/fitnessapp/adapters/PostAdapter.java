@@ -1,6 +1,7 @@
 package com.example.fitnessapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
 import com.example.fitnessapp.R;
+import com.example.fitnessapp.PostActivity;
 import com.example.fitnessapp.models.Post;
 import java.util.List;
 
@@ -32,13 +33,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = postList.get(position);
-        holder.fullName.setText(post.getFullName());
-        holder.username.setText(post.getUsername());
+        holder.fullName.setText(post.getFullName() + " - @" + post.getUsername());
+        holder.activityType.setText("Activity: " + post.getActivityTypeName());
+        holder.duration.setText("Duration: " + post.getDuration() + " mins");
         holder.content.setText(post.getContent());
-        holder.timestamp.setText(post.getTimestamp());
         holder.likesCount.setText(String.valueOf(post.getLikesCount()));
         holder.commentsCount.setText(String.valueOf(post.getCommentsCount()));
 
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, PostActivity.class);
+            intent.putExtra("postID", post.getPostID());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -47,15 +53,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView username, content, timestamp, likesCount, commentsCount, fullName;
+        TextView fullName, activityType, duration, content, likesCount, commentsCount;
         ImageView likeIcon, commentIcon;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            username = itemView.findViewById(R.id.tvUsername);
+            fullName = itemView.findViewById(R.id.tvFullName);
+            activityType = itemView.findViewById(R.id.tvActivityType);
+            duration = itemView.findViewById(R.id.tvDuration);
             content = itemView.findViewById(R.id.tvContent);
-            timestamp = itemView.findViewById(R.id.tvTimestamp);
             likesCount = itemView.findViewById(R.id.tvLikesCount);
             commentsCount = itemView.findViewById(R.id.tvCommentsCount);
             likeIcon = itemView.findViewById(R.id.ivLike);
