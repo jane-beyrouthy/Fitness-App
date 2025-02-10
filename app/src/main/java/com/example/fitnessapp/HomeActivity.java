@@ -36,6 +36,12 @@ public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadFeed();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);

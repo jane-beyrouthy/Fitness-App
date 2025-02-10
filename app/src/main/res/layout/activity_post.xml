@@ -1,10 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostActivity">
+    android:background="@android:color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Toolbar -->
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:background="@color/dark_blue">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_back"
+            app:tint="@android:color/white"
+            android:layout_marginEnd="16dp"/>
+
+        <!-- Screen Title -->
+        <TextView
+            android:id="@+id/tvPostTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post Details"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Post Owner & Activity Info -->
+    <LinearLayout
+        android:id="@+id/postHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_below="@id/toolbar">
+
+        <!-- Full Name & Username -->
+        <TextView
+            android:id="@+id/tvPostOwner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <!-- Activity Type & Duration -->
+        <TextView
+            android:id="@+id/tvActivityInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- Post Content -->
+    <TextView
+        android:id="@+id/tvPostContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_margin="16dp"
+        android:text="Post Content Goes Here"
+        android:layout_below="@id/postHeader"/>
+
+    <!-- Like & Comment Section -->
+    <LinearLayout
+        android:id="@+id/likeCommentContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_below="@id/tvPostContent">
+
+        <!-- Like Icon & Count -->
+        <ImageView
+            android:id="@+id/ivLike"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_like"
+            app:tint="@android:color/darker_gray"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPostLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 Likes"
+            android:textSize="14sp"/>
+
+        <!-- Space Between Like & Comment -->
+        <View
+            android:layout_width="16dp"
+            android:layout_height="match_parent"/>
+
+        <!-- Comment Icon & Count -->
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_comment"
+            app:tint="@android:color/darker_gray"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPostComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 Comments"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <!-- Comment Input -->
+    <LinearLayout
+        android:id="@+id/commentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:layout_below="@id/likeCommentContainer">
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Write a comment..."
+            android:padding="12dp"
+            android:background="@drawable/input_bg"
+            android:importantForAccessibility="yes"/>
+
+        <Button
+            android:id="@+id/btnPostComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_bg"
+            android:padding="10dp"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- RecyclerView for Comments -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/commentContainer"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:scrollbars="vertical"/>
+    <!-- No Comments Text (Initially Hidden) -->
+    <TextView
+        android:id="@+id/tvNoComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commentContainer"
+        android:text="No comments yet"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>
