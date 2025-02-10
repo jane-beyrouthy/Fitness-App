@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PostActivity extends AppCompatActivity {
-    private TextView tvPostOwner, tvActivityInfo, tvPostContent, tvPostLikes, tvPostComments, tvNoComments;
+    private TextView tvPostOwner, tvActivityInfo, tvPostContent, tvPostLikes, tvPostComments, tvNoComments, tvCaloriesBurned;
     private ImageView ivLike, ivComment, ivBack;
     private EditText etComment;
     private Button btnPostComment;
@@ -50,6 +50,7 @@ public class PostActivity extends AppCompatActivity {
         // Initialize Views
         tvPostOwner = findViewById(R.id.tvPostOwner);
         tvActivityInfo = findViewById(R.id.tvActivityInfo);
+        tvCaloriesBurned = findViewById(R.id.tvCaloriesBurned);
         tvPostContent = findViewById(R.id.tvPostContent);
         tvPostLikes = findViewById(R.id.tvPostLikes);
         tvPostComments = findViewById(R.id.tvPostComments);
@@ -128,6 +129,7 @@ public class PostActivity extends AppCompatActivity {
                         String username = postObj.getString("username");
                         String activityTypeName = postObj.getString("activityTypeName");
                         int duration = postObj.getInt("duration");
+                        int caloriesBurned = postObj.getInt("caloriesBurned");
                         String content = postObj.getString("content");
                         likesCount = postObj.getInt("likeCount");
                         int commentsCount = postObj.getInt("commentCount");
@@ -135,6 +137,7 @@ public class PostActivity extends AppCompatActivity {
                         // Set UI Data
                         tvPostOwner.setText(firstName + " " + lastName + " - @" + username);
                         tvActivityInfo.setText(activityTypeName + " - " + duration + " mins");
+                        tvCaloriesBurned.setText("Calories Burned: "+ caloriesBurned +" kcal");
                         tvPostContent.setText(content);
                         tvPostLikes.setText(likesCount + " Likes");
                         tvPostComments.setText(commentsCount + " Comments");

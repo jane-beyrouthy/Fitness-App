@@ -114,12 +114,13 @@ public class HomeActivity extends AppCompatActivity {
                             String username = postObj.getString("username");
                             String activityTypeName = postObj.getString("activityTypeName");
                             int duration = postObj.getInt("duration");
+                            int caloriesBurned = postObj.getInt("caloriesBurned");
                             String content = postObj.getString("content");
                             String timestamp = postObj.getString("timestamp");
                             int likesCount = postObj.getInt("likeCount");
                             int commentsCount = postObj.getInt("commentCount");
 
-                            postList.add(new Post(postID, firstName, lastName, username, activityTypeName, duration, content, timestamp, likesCount, commentsCount));
+                            postList.add(new Post(postID, firstName, lastName, username, activityTypeName, duration, caloriesBurned,content, timestamp, likesCount, commentsCount));
                         }
 
                         postAdapter = new PostAdapter(HomeActivity.this, postList);

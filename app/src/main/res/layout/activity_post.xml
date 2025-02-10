@@ -60,6 +60,15 @@
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
             android:layout_marginTop="4dp"/>
+
+        <!-- Calories Burned -->
+        <TextView
+            android:id="@+id/tvCaloriesBurned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 
     <!-- Post Content -->
@@ -151,12 +160,25 @@
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
+    <!-- Feed Title -->
+    <TextView
+        android:id="@+id/tvCommentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comments"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/commentContainer"/>
+
     <!-- RecyclerView for Comments -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/commentContainer"
+        android:layout_below="@id/tvCommentTitle"
         android:layout_marginTop="8dp"
         android:padding="8dp"
         android:scrollbars="vertical"/>

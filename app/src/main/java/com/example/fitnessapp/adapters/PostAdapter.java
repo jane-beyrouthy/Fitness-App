@@ -36,6 +36,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.fullName.setText(post.getFullName() + " - @" + post.getUsername());
         holder.activityType.setText("Activity: " + post.getActivityTypeName());
         holder.duration.setText("Duration: " + post.getDuration() + " mins");
+        holder.caloriesBurned.setText("Calories Burned: " + post.getCaloriesBurned() + " kcal");
         holder.content.setText(post.getContent());
         holder.likesCount.setText(String.valueOf(post.getLikesCount()));
         holder.commentsCount.setText(String.valueOf(post.getCommentsCount()));
@@ -53,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView fullName, activityType, duration, content, likesCount, commentsCount;
+        TextView fullName, activityType, duration, content, likesCount, commentsCount, caloriesBurned;
         ImageView likeIcon, commentIcon;
 
         public PostViewHolder(@NonNull View itemView) {
@@ -61,6 +62,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             fullName = itemView.findViewById(R.id.tvFullName);
             activityType = itemView.findViewById(R.id.tvActivityType);
             duration = itemView.findViewById(R.id.tvDuration);
+            caloriesBurned = itemView.findViewById(R.id.tvCaloriesBurned);
             content = itemView.findViewById(R.id.tvContent);
             likesCount = itemView.findViewById(R.id.tvLikesCount);
             commentsCount = itemView.findViewById(R.id.tvCommentsCount);
