@@ -23,10 +23,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView tvName;
     private ImageView ivLogout, ivSearch , ivNotifications;
     private Button btnLogNewActivity, btnCreateNewPost;
     private RecyclerView recyclerView;
@@ -39,7 +40,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        tvName = findViewById(R.id.tvName);
         ivLogout = findViewById(R.id.ivLogout);
         ivSearch = findViewById(R.id.ivSearch);
         ivNotifications = findViewById(R.id.ivNotifications);
@@ -51,14 +51,6 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String firstName = prefs.getString("firstName", "Guest");
-        String lastName = prefs.getString("lastName", "");
-        String fullName = firstName + " "+ lastName;
-        tvName.setText(fullName);
-
-        tvName.setOnClickListener(view -> {
-            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-        });
 
         ivSearch.setOnClickListener(view -> startActivity(new Intent(HomeActivity.this, SearchActivity.class)));
 
@@ -97,6 +89,15 @@ public class HomeActivity extends AppCompatActivity {
     private void loadFeed() {
         String url = "http://10.0.2.2:3000/posts/feed";
 
+        // Retrieve token from SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String token = prefs.getString("auth_token", null);
+
+        if (token == null) {
+            Toast.makeText(this, "Authentication error. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
@@ -110,12 +111,11 @@ public class HomeActivity extends AppCompatActivity {
                             String lastName = postObj.getString("lastName");
                             String username = postObj.getString("username");
                             String content = postObj.getString("content");
-                            String imageUrl = postObj.optString("imageURL", "");
                             String timestamp = postObj.getString("timestamp");
-                            int likesCount = postObj.getInt("likesCount");
-                            int commentsCount = postObj.getInt("commentsCount");
+                            int likesCount = postObj.getInt("likeCount");
+                            int commentsCount = postObj.getInt("commentCount");
 
-                            postList.add(new Post(firstName, lastName, username, content, imageUrl, timestamp, likesCount, commentsCount));
+                            postList.add(new Post(firstName, lastName, username, content, timestamp,likesCount, commentsCount));
                         }
 
                         postAdapter = new PostAdapter(HomeActivity.this, postList);
@@ -125,7 +125,15 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 },
                 error -> Toast.makeText(HomeActivity.this, "Failed to load feed", Toast.LENGTH_SHORT).show()
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token); // Add Authorization Header
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
 
         ApiHelper.getInstance(this).addToRequestQueue(request);
     }

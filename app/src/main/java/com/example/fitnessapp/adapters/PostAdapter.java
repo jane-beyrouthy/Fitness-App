@@ -39,12 +39,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.likesCount.setText(String.valueOf(post.getLikesCount()));
         holder.commentsCount.setText(String.valueOf(post.getCommentsCount()));
 
-        // Load image using Glide
-        if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
-            Glide.with(context).load(post.getImageUrl()).into(holder.postImage);
-        } else {
-            holder.postImage.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -54,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         TextView username, content, timestamp, likesCount, commentsCount, fullName;
-        ImageView postImage, likeIcon, commentIcon;
+        ImageView likeIcon, commentIcon;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,7 +58,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             timestamp = itemView.findViewById(R.id.tvTimestamp);
             likesCount = itemView.findViewById(R.id.tvLikesCount);
             commentsCount = itemView.findViewById(R.id.tvCommentsCount);
-            postImage = itemView.findViewById(R.id.ivPostImage);
             likeIcon = itemView.findViewById(R.id.ivLike);
             commentIcon = itemView.findViewById(R.id.ivComment);
         }

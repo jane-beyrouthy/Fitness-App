@@ -15,21 +15,21 @@
         android:gravity="top"
         android:background="@color/dark_blue">
 
-        <!-- Full Name (Clickable) -->
+        <!-- Home -->
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Home"
             android:textSize="24sp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:clickable="true"
             android:focusable="true"/>
 
         <!-- Spacer -->
         <View
             android:layout_width="0dp"
-            android:layout_height="39dp"
+            android:layout_height="38dp"
             android:layout_weight="1" />
 
         <!-- Search Icon -->
