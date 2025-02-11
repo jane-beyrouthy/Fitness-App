@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -81,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, ChallengesActivity.class));
             finish();
         } else if (itemId == R.id.nav_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, MyProfileActivity.class));
             finish();
         }
         return true;
