@@ -170,11 +170,12 @@ public class MyProfileActivity extends AppCompatActivity {
                         JSONArray friendsArray = response.getJSONArray("friends");
                         for (int i = 0; i < friendsArray.length(); i++) {
                             JSONObject obj = friendsArray.getJSONObject(i);
+                            int friendID = obj.getInt("friendID");
                             String firstName = obj.getString("firstName");
                             String lastName = obj.getString("lastName");
                             String username = obj.getString("username");
 
-                            friendList.add(new Friend(firstName, lastName,username));
+                            friendList.add(new Friend(friendID, firstName, lastName,username));
                         }
                         friendAdapter = new FriendAdapter(MyProfileActivity.this, friendList);
                         recyclerView.setAdapter(friendAdapter);

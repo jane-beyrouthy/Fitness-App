@@ -1,6 +1,7 @@
 package com.example.fitnessapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitnessapp.R;
+import com.example.fitnessapp.UserProfileActivity;
 import com.example.fitnessapp.models.Friend;
 import java.util.List;
 
@@ -32,6 +34,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         Friend friend = friendList.get(position);
         holder.tvFullName.setText(friend.getFullName());
         holder.tvUsername.setText("@" + friend.getUsername());
+
+        // Click listener to open UserProfileDetailActivity
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, UserProfileActivity.class);
+            intent.putExtra("friendID", friend.getFriendID());
+            intent.putExtra("fullName", friend.getFullName());
+            intent.putExtra("username", friend.getUsername());
+            context.startActivity(intent);
+        });
     }
 
     @Override
