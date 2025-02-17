@@ -55,14 +55,15 @@
     <TextView
         android:id="@+id/btnFollow"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="16dp"
         android:layout_below="@id/userInfo"
         android:layout_centerHorizontal="true"
-        android:text="Follow"
+        android:text="Button"
         android:textAlignment="center"
+        android:padding="12dp"
         android:textStyle="bold"
-        android:background="@drawable/button_bg"
+        android:background="@color/button_normal"
         android:textColor="@android:color/white"
         android:clickable="true"
         android:textSize="18sp"/>

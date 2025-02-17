@@ -30,7 +30,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private String fullName, username;
     private int userID;
     private List<Friend> friendList = new ArrayList<>();
-    private boolean isFollowing = false; // Track follow status
+    private boolean isFollowing; // Track follow status
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +85,12 @@ public class UserProfileActivity extends AppCompatActivity {
                             String lastName = obj.getString("lastName");
                             String username = obj.getString("username");
 
+                            if (friendID == userID ){
+                                isFollowing = true;
+                                break;
+                            }
                             friendList.add(new Friend(friendID,firstName, lastName,username));
                         }
-                        isFollowing = friendList.contains(new Friend(userID,fullName.substring(0,1), fullName.substring(2), username));
                         updateFollowButton();
                     } catch (JSONException e) {
                         e.printStackTrace();
