@@ -18,8 +18,10 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.fitnessapp.adapters.ActivityAdapter;
 import com.example.fitnessapp.adapters.FriendAdapter;
+import com.example.fitnessapp.adapters.PostAdapter;
 import com.example.fitnessapp.models.Activity;
 import com.example.fitnessapp.models.Friend;
+import com.example.fitnessapp.models.Post;
 import com.example.fitnessapp.utils.ApiHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -32,16 +34,19 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class MyProfileActivity extends AppCompatActivity {
-    private TextView tvFullName, tvUsername, tvTitle,btnActivitySummary, btnFriendsList;
+    private TextView tvFullName, tvUsername, tvTitle,btnActivitySummary, btnFriendsList, btnPostsList;
     private ImageView ivNotifications, ivLogout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ActivityAdapter activityAdapter;
     private FriendAdapter friendAdapter;
+    private PostAdapter postAdapter;
+    private List<Post> postList = new ArrayList<>();
     private List<Activity> activityList = new ArrayList<>();
     private List<Friend> friendList = new ArrayList<>();
     private BottomNavigationView bottomNavigationView;
     private boolean isActivitySelected = false; // Track selected list
+    private boolean isFriendsSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class MyProfileActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         btnActivitySummary = findViewById(R.id.btnActivitySummary);
         btnFriendsList = findViewById(R.id.btnFriendsList);
+        btnPostsList =findViewById(R.id.btnPostsList);
         ivNotifications = findViewById(R.id.ivNotifications);
         ivLogout = findViewById(R.id.ivLogout);
         recyclerView = findViewById(R.id.recyclerView);
@@ -73,6 +79,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
         btnActivitySummary.setOnClickListener(view -> loadActivitySummary());
         btnFriendsList.setOnClickListener(view -> loadFriendsList());
+        btnPostsList.setOnClickListener(view -> loadPostsList());
         //ivNotifications.setOnClickListener(view -> startActivity(new Intent(this, NotificationsActivity.class)));
         ivLogout.setOnClickListener(view -> logoutUser());
 
@@ -102,6 +109,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private void resetSelection() {
         btnActivitySummary.setBackgroundColor(Color.parseColor("#757575")); //gray
         btnFriendsList.setBackgroundColor(Color.parseColor("#757575")); //gray
+        btnPostsList.setBackgroundColor(Color.parseColor("#757575"));//gray
         recyclerView.setVisibility(View.GONE);
         tvTitle.setVisibility(View.GONE);
     }
@@ -154,6 +162,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
     private void loadFriendsList() {
         isActivitySelected = false;
+        isFriendsSelected = true;
         switchButtonColors();
         tvTitle.setText("My Friends");
         recyclerView.setVisibility(View.GONE);
@@ -197,14 +206,85 @@ public class MyProfileActivity extends AppCompatActivity {
 
         ApiHelper.getInstance(this).addToRequestQueue(request);
     }
+    private void loadPostsList(){
+        isActivitySelected = false;
+        isFriendsSelected = false;
+        switchButtonColors();
+        tvTitle.setText("My Posts");
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+            String url = "http://10.0.2.2:3000/posts/my-posts";
+
+            // Retrieve token from SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            String token = prefs.getString("auth_token", null);
+
+            if (token == null) {
+                Toast.makeText(this, "Authentication error. Please log in again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                    response -> {
+                        try {
+                            System.out.println("API Response: " + response.toString());
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            postList.clear();
+                            JSONArray postsArray = response.getJSONArray("posts");
+
+                            for (int i = 0; i < postsArray.length(); i++) {
+                                JSONObject postObj = postsArray.getJSONObject(i);
+
+                                int postID = postObj.getInt("postID");
+                                String firstName = postObj.getString("firstName");
+                                String lastName = postObj.getString("lastName");
+                                String username = postObj.getString("username");
+                                String activityTypeName = postObj.getString("activityTypeName");
+                                int duration = postObj.getInt("duration");
+                                int caloriesBurned = postObj.getInt("caloriesBurned");
+                                String content = postObj.getString("content");
+                                String timestamp = postObj.getString("timestamp");
+                                int likesCount = postObj.getInt("likeCount");
+                                int commentsCount = postObj.getInt("commentCount");
+
+                                postList.add(new Post(postID, firstName, lastName, username, activityTypeName, duration, caloriesBurned,content, timestamp, likesCount, commentsCount));
+                            }
+
+                            postAdapter = new PostAdapter(MyProfileActivity.this, postList);
+                            recyclerView.setAdapter(postAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    },
+                    error -> Toast.makeText(MyProfileActivity.this, "Failed to load feed", Toast.LENGTH_SHORT).show()
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token); // Add Authorization Header
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
+
+            ApiHelper.getInstance(this).addToRequestQueue(request);
+    }
+
 
     private void switchButtonColors() {
         if (isActivitySelected) {
             btnActivitySummary.setBackgroundColor(Color.parseColor("#2196F3")); //blue
             btnFriendsList.setBackgroundColor(Color.parseColor("#757575")); //gray
-        } else {
-            btnActivitySummary.setBackgroundColor(Color.parseColor("#757575")); //gray
+            btnPostsList.setBackgroundColor(Color.parseColor("#757575"));//gray
+        } else if (isFriendsSelected) {
+            btnActivitySummary.setBackgroundColor(Color.parseColor("#757575"));//gray
             btnFriendsList.setBackgroundColor(Color.parseColor("#2196F3")); //blue
+            btnPostsList.setBackgroundColor(Color.parseColor("#757575"));//gray
+        }else {
+            btnActivitySummary.setBackgroundColor(Color.parseColor("#757575"));//gray
+            btnFriendsList.setBackgroundColor(Color.parseColor("#757575"));//gray
+            btnPostsList.setBackgroundColor(Color.parseColor("#2196F3")); //blue
         }
     }
 

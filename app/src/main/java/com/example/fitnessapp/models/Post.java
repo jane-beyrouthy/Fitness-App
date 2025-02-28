@@ -27,6 +27,20 @@ public class Post {
         this.commentsCount = commentsCount;
     }
 
+    public Post(int postID, String activityTypeName, int duration,int caloriesBurned, String content, String timestamp, int likesCount, int commentsCount) {
+        this.postID = postID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.activityTypeName = activityTypeName;
+        this.duration = duration;
+        this.caloriesBurned =caloriesBurned;
+        this.content = content;
+        this.timestamp = timestamp;
+        this.likesCount = likesCount;
+        this.commentsCount = commentsCount;
+    }
+
     public int getPostID() { return postID; }
     public String getFullName() { return firstName + " " + lastName; }
     public String getUsername() { return username; }
